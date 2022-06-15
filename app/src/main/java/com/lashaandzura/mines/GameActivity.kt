@@ -1,15 +1,8 @@
 package com.lashaandzura.mines
 
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.DrawableWrapper
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Layout
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
 import android.widget.*
-import androidx.core.view.children
 import com.lashaandzura.mines.databinding.ActivityGameBinding
 import com.lashaandzura.mines.models.Square
 import kotlin.collections.ArrayList
@@ -32,7 +25,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         matrix = generateMatrix()
-        getButtons(binding.mineZone, matrix)
+        addButtonLogic(binding.mineZone, matrix)
     }
 
     private fun checkIfWon(){
@@ -52,13 +45,13 @@ class GameActivity : AppCompatActivity() {
 
     private fun restart(){
         matrix = generateMatrix()
-        getButtons(binding.mineZone, matrix)
+        addButtonLogic(binding.mineZone, matrix)
         exploded = false
         openedBox = 0
         binding.gameHeader.text = "ჰე ჰე დააჩქარე"
     }
 
-    private fun getButtons(layout: TableLayout, matrix: ArrayList<ArrayList<Square>>){
+    private fun addButtonLogic(layout: TableLayout, matrix: ArrayList<ArrayList<Square>>){
         for(i in 0..7){
             val tableRow = layout.getChildAt(i) as TableRow
             for (j in 0..7){
