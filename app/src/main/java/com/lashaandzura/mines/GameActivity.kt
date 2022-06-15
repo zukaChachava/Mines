@@ -12,11 +12,14 @@ import android.widget.*
 import androidx.core.view.children
 import com.lashaandzura.mines.databinding.ActivityGameBinding
 import com.lashaandzura.mines.models.Square
-import java.util.ArrayList
+import kotlin.collections.ArrayList
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
     private lateinit var matrix: ArrayList<ArrayList<Square>>
+
+    private var exploded: Boolean = false
+    private var openedBox: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +27,35 @@ class GameActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        binding.restartBtn.setOnClickListener {
+            restart()
+        }
+
         matrix = generateMatrix()
         getButtons(binding.mineZone, matrix)
+    }
+
+    private fun checkIfWon(){
+        openedBox++;
+        if(openedBox == 56)
+            won()
+    }
+
+    private fun won(){
+        binding.gameHeader.text = "მეიგო სმნ"
+    }
+
+    private fun lost(){
+        exploded = true
+        binding.gameHeader.text = "არადა რა კარგად მიდიოდი"
+    }
+
+    private fun restart(){
+        matrix = generateMatrix()
+        getButtons(binding.mineZone, matrix)
+        exploded = false
+        openedBox = 0
+        binding.gameHeader.text = "ჰე ჰე დააჩქარე"
     }
 
     private fun getButtons(layout: TableLayout, matrix: ArrayList<ArrayList<Square>>){
@@ -33,25 +63,45 @@ class GameActivity : AppCompatActivity() {
             val tableRow = layout.getChildAt(i) as TableRow
             for (j in 0..7){
                 val frame = tableRow.getChildAt(j) as FrameLayout
+                val imageButton = frame.getChildAt(0) as ImageButton
+                val textView = frame.getChildAt(1) as TextView
+                imageButton.setBackgroundResource(R.drawable.warning)
+                textView.text = null
                 frame.setOnClickListener {
-                    val imageButton = frame.getChildAt(0) as ImageButton
+                    if(exploded || openedBox == 56)
+                        return@setOnClickListener
+
                     if(matrix[i][j].isMined){
                         imageButton.setBackgroundResource(R.drawable.bomb)
+                        lost()
                         return@setOnClickListener
                     }
                     imageButton.setBackgroundColor(0)
-                    val textView = frame.getChildAt(1) as TextView
                     textView.text = countBombsNearby(matrix[i][j]).toString()
+                    checkIfWon()
                 }
             }
         }
     }
 
+    private fun generateRandomArray(): ArrayList<Int>{
+        val elements = ArrayList<Int>()
+        while (elements.size <= 8){
+            val num = (1..64).random()
+
+            if(elements.find { it == num} == null)
+                elements.add(num)
+        }
+
+        return elements
+    }
+
     private fun countBombsNearby(square: Square): Int{
         var count: Int = 0;
 
-        if(square.xCord - 1 > -1 && matrix[square.yCord][square.xCord - 1].isMined){
-            count++
+        if(square.xCord - 1 > -1){
+            if(matrix[square.yCord][square.xCord - 1].isMined)
+                count++
 
             if(square.yCord + 1 < 8 && matrix[square.yCord + 1][square.xCord - 1].isMined)
                 count++
@@ -60,8 +110,9 @@ class GameActivity : AppCompatActivity() {
                 count++
         }
 
-        if(square.xCord + 1 < 8 && matrix[square.yCord][square.xCord + 1].isMined){
-            count++;
+        if(square.xCord + 1 < 8){
+            if(matrix[square.yCord][square.xCord + 1].isMined)
+                count++;
 
             if(square.yCord + 1 < 8 && matrix[square.yCord + 1][square.xCord + 1].isMined)
                 count++
@@ -81,12 +132,13 @@ class GameActivity : AppCompatActivity() {
 
     private fun generateMatrix(): ArrayList<ArrayList<Square>>{
         val matrix = ArrayList<ArrayList<Square>>()
+        val bombs = generateRandomArray()
 
         for(row in 0..7){
             val rowArray = ArrayList<Square>();
             matrix.add(rowArray)
             for(column in 0..7){
-                rowArray.add(Square(column, row, (0..6).random() and 1 == 0, 5))
+                rowArray.add(Square(column, row, bombs.find { it == row * 8 + column } != null, 5))
             }
         }
 
