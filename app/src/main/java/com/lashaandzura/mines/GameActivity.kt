@@ -1,15 +1,25 @@
 package com.lashaandzura.mines
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import com.lashaandzura.mines.constants.Constants
 import com.lashaandzura.mines.databinding.ActivityGameBinding
 import com.lashaandzura.mines.models.Square
+import com.lashaandzura.mines.notifications.NotificationUtil
+import com.lashaandzura.mines.receivers.MineReceiver
 import kotlin.collections.ArrayList
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
     private lateinit var matrix: ArrayList<ArrayList<Square>>
+    private lateinit var mineReceiver: MineReceiver
 
     private var exploded: Boolean = false
     private var openedBox: Int = 0
@@ -18,6 +28,8 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        registerMineReceiver()
+        createChannel()
 
 
         binding.restartBtn.setOnClickListener {
@@ -36,11 +48,13 @@ class GameActivity : AppCompatActivity() {
 
     private fun won(){
         binding.gameHeader.text = "მეიგო სმნ"
+        throwBroadcast(true);
     }
 
     private fun lost(){
         exploded = true
         binding.gameHeader.text = "არადა რა კარგად მიდიოდი"
+        throwBroadcast(false)
     }
 
     private fun restart(){
@@ -138,30 +152,35 @@ class GameActivity : AppCompatActivity() {
         return matrix
     }
 
-     // Want to generate matrix of buttons from code || Not using for now
-    private fun generateMineField(){
-        for (i in 1..8){
-            val row = createTableRow()
-            binding.mineZone.addView(row)
-            for (j in 1..8){
-                row.addView(createButton())
-                row.invalidate()
-            }
-            binding.mineZone.invalidate()
+    private fun throwBroadcast(won: Boolean){
+        val intent = Intent()
+        intent.setAction("com.lashaandzura.mines")
+        intent.putExtra(Constants.BROADCAST_KEY, won)
+        sendBroadcast(intent)
+    }
+
+    private fun registerMineReceiver(){
+        mineReceiver = MineReceiver()
+        IntentFilter("com.lashaandzura.mines").also {
+            registerReceiver(mineReceiver, it)
         }
     }
 
-    private fun createTableRow(): TableRow{
-        val row = TableRow(this)
-        val params = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 8.0f)
-        row.layoutParams = params
-        return row
+    private fun createChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val lasha = NotificationChannel(
+                NotificationUtil.CHANNEL_ID, NotificationUtil.CHANNEL_ID,
+                NotificationManager.IMPORTANCE_DEFAULT).apply {
+                description = "Mine Notification"
+            }
+
+            val manager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(lasha)
+        }
     }
 
-    private fun createButton(): Button {
-        val button = Button(this)
-        val params = TableLayout.LayoutParams(0, 0, 1.0f)
-        button.layoutParams = params
-        return button
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(mineReceiver)
     }
 }
