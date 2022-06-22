@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import com.lashaandzura.mines.constants.Constants
 import com.lashaandzura.mines.databinding.ActivityGameBinding
@@ -42,7 +43,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun checkIfWon(){
         openedBox++;
-        if(openedBox == 56)
+        if(openedBox == 55)
             won()
     }
 
@@ -75,7 +76,7 @@ class GameActivity : AppCompatActivity() {
                 imageButton.setBackgroundResource(R.drawable.warning)
                 textView.text = null
                 frame.setOnClickListener {
-                    if(exploded || openedBox == 56)
+                    if(exploded || openedBox == 55)
                         return@setOnClickListener
 
                     if(matrix[i][j].isMined){
@@ -94,7 +95,7 @@ class GameActivity : AppCompatActivity() {
     private fun generateRandomArray(): ArrayList<Int>{
         val elements = ArrayList<Int>()
         while (elements.size <= 8){
-            val num = (1..64).random()
+            val num = (0..63).random()
 
             if(elements.find { it == num} == null)
                 elements.add(num)
@@ -145,7 +146,9 @@ class GameActivity : AppCompatActivity() {
             val rowArray = ArrayList<Square>();
             matrix.add(rowArray)
             for(column in 0..7){
-                rowArray.add(Square(column, row, bombs.find { it == row * 8 + column } != null, 5))
+                rowArray.add(Square(column, row, bombs.find { it == row * 8 + column } != null))
+                if(bombs.find { it == row * 8 + column }  != null)
+                    Log.d("zura", "${row} ${column}")
             }
         }
 
