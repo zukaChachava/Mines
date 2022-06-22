@@ -15,6 +15,9 @@ import com.lashaandzura.mines.databinding.ActivityGameBinding
 import com.lashaandzura.mines.models.Square
 import com.lashaandzura.mines.notifications.NotificationUtil
 import com.lashaandzura.mines.receivers.MineReceiver
+import com.lashaandzura.mines.room.Statistic
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
 
 class GameActivity : AppCompatActivity() {
@@ -49,12 +52,20 @@ class GameActivity : AppCompatActivity() {
 
     private fun won(){
         binding.gameHeader.text = "მეიგო სმნ"
-        throwBroadcast(true);
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+        val formatted = current.format(formatter)
+        App.instance.db.getStatisticDao().insert(Statistic(0, result = true, date=formatted))
+        throwBroadcast(true)
     }
 
     private fun lost(){
         exploded = true
         binding.gameHeader.text = "არადა რა კარგად მიდიოდი"
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+        val formatted = current.format(formatter)
+        App.instance.db.getStatisticDao().insert(Statistic(0, result = false, date=formatted))
         throwBroadcast(false)
     }
 
