@@ -11,9 +11,9 @@ import kotlin.math.log
 class MineReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         if(intent.getBooleanExtra(Constants.BROADCAST_KEY, true)){
-            NotificationUtil.showNotification(context!!, "შე შე რავარი მეიგო !")
+            NotificationUtil.showNotification(context!!, "გილოცავ, მოიგე. შენი რესულტატი შენახულია ჩვენს ბაზაში... სამუდამოდ")
             return
         }
-        NotificationUtil.showNotification(context!!, "Loooseeeer !")
+        NotificationUtil.showNotification(context!!, "სამწუხაროდ, დამარცხდი. შენი რესულტატი შენახულია ჩვენს ბაზაში... სამუდამოდ")
     }
 }

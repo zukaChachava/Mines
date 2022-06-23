@@ -30,6 +30,7 @@ class GameActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         registerMineReceiver()
@@ -51,7 +52,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun won(){
-        binding.gameHeader.text = "მეიგო სმნ"
+        binding.gameHeader.text = "გილოცავ!"
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
         val formatted = current.format(formatter)
@@ -61,7 +62,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun lost(){
         exploded = true
-        binding.gameHeader.text = "არადა რა კარგად მიდიოდი"
+        binding.gameHeader.text = "რა სამწუხაროა..."
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
         val formatted = current.format(formatter)
@@ -74,7 +75,7 @@ class GameActivity : AppCompatActivity() {
         addButtonLogic(binding.mineZone, matrix)
         exploded = false
         openedBox = 0
-        binding.gameHeader.text = "ჰე ჰე დააჩქარე"
+        binding.gameHeader.text = "კიდევ სცადე..."
     }
 
     private fun addButtonLogic(layout: TableLayout, matrix: ArrayList<ArrayList<Square>>){

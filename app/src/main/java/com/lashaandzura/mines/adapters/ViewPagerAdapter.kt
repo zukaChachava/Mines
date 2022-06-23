@@ -1,9 +1,11 @@
 package com.lashaandzura.mines.adapters
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.lashaandzura.mines.R
 import com.lashaandzura.mines.fragments.ImageFragment
 
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
@@ -15,8 +17,16 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
 
     override fun createFragment(position: Int): Fragment {
         when(position){
-            0 -> return ImageFragment()
-            else -> return ImageFragment()
+            0 -> return ImageFragment().apply {
+                arguments = Bundle().apply {
+                    putInt("imageUrl", R.drawable.zura_da_me)
+                }
+            }
+            else -> return ImageFragment().apply {
+                arguments = Bundle().apply {
+                    putInt("imageUrl", R.drawable.chven)
+                }
+            }
         }
     }
 }

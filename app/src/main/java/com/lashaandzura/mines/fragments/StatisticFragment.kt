@@ -21,7 +21,7 @@ class StatisticFragment: Fragment(R.layout.fragment_statistics) {
         val loses = App.instance.db.getStatisticDao().getSumLose()
         val wins = App.instance.db.getStatisticDao().getSumWin()
         val all = loses + wins
-        resultText.text = "Full Results: $wins / $loses out of $all matches"
+        resultText.text = "რესულტატი: $wins / $loses $all თამაშიდან"
         val statistics = App.instance.db.getStatisticDao().getAllStatistic()
         recyclerView.adapter = StatisticRecyclerAdapter(statistics)
         recyclerView.layoutManager = LinearLayoutManager(context)
