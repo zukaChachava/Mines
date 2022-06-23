@@ -3,10 +3,10 @@
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="Home"/>
+        android:title="სახლი"/>
     <item
         android:id="@+id/statisticFragment"
         android:icon="@drawable/ic_baseline_bar_chart_24"
-        android:title="Statistic"/>
+        android:title="სტატისტიკა"/>
 
 </menu>
