@@ -1,20 +1,18 @@
 package com.lashaandzura.mines.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import com.lashaandzura.mines.R
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ImageFragment : Fragment() {
+class DetailsFragment: Fragment() {
     private var param1: String? = null
     private var param2: String? = null
-    private var imageId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +26,7 @@ class ImageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_image, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        imageId = requireArguments().getInt("imageUrl")
-        view.findViewById<ImageView>(R.id.imageView).setImageResource(imageId)
+        return inflater.inflate(R.layout.fragment_details, container, false)
     }
 
     companion object {

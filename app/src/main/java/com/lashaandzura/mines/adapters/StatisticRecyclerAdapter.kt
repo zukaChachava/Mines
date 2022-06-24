@@ -9,9 +9,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.lashaandzura.mines.R
 import com.lashaandzura.mines.room.Statistic
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class StatisticRecyclerAdapter(private val resources: List<Statistic>): RecyclerView.Adapter<StatisticRecyclerAdapter.ResourceViewHolder>() {
     class ResourceViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
