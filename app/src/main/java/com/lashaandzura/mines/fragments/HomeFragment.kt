@@ -16,7 +16,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
     private lateinit var startButton: Button
     private lateinit var viewPager2: ViewPager2
     private lateinit var tableLayout: TabLayout
-    val tabTitle = arrayOf("ჩვენ", "კიდევ ჩვენ")
+    val tabTitle = arrayOf("თამაში", "დეტალები")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewPager2 = view.findViewById(R.id.pager)
