@@ -1452,7 +1452,7 @@
         android:id="@+id/restartBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="restart"
+        android:text="თავიდან ჩამირთე"
         android:textColor="@color/white"
         android:background="#8001C5"
         app:layout_constraintBottom_toBottomOf="parent"
